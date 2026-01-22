@@ -18,7 +18,6 @@
             transition: background 0.5s ease;
         }
 
-        /* تأثير النبض للخلفية عند الإجهاد العالي */
         @keyframes stress-pulse {
             0% { background: radial-gradient(circle, #0d1117 0%, #000000 100%); }
             100% { background: radial-gradient(circle, #4a0505 0%, #000000 100%); }
@@ -43,13 +42,15 @@
         .header small { color: #8b949e; }
 
         #chat-box {
-            height: 300px;
+            height: 250px;
             overflow-y: auto;
             border: 1px solid #30363d;
             padding: 15px;
             background: #0d1117;
             border-radius: 10px;
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .status-panel {
@@ -68,6 +69,7 @@
             background: #30363d;
             border-radius: 5px;
             overflow: hidden;
+            margin-top: 5px;
         }
 
         #stress-fill {
@@ -87,6 +89,7 @@
             color: white;
             padding: 10px;
             border-radius: 5px;
+            outline: none;
         }
 
         button {
@@ -108,7 +111,7 @@
         <div style="background: #161b22; padding: 40px; border: 2px solid #58a6ff; border-radius: 20px; max-width: 500px; text-align: center;">
             <div style="font-size: 60px; color: #58a6ff; font-weight: bold; border: 4px solid #58a6ff; display: inline-block; width: 100px; height: 100px; line-height: 100px; border-radius: 50%; box-shadow: 0 0 20px #58a6ff; margin-bottom: 20px;">Σ</div>
             <h2 style="color: white;">مختبر CECIT 2026</h2>
-            <p style="color: #8b949e; line-height: 1.6;">مرحباً بك في نظام محاكاة القيود الناشئة والضغط الدلالي. يرجى مراقبة المقاييس أثناء التفاعل.</p>
+            <p style="color: #8b949e; line-height: 1.6;">مرحباً بك في نظام محاكاة القيود الناشئة والضغط الدلالي.</p>
             <button onclick="closeModal()" style="margin-top: 20px; padding: 12px 30px; font-size: 16px;">دخول المختبر</button>
         </div>
     </div>
@@ -141,50 +144,62 @@
     </div>
 
     <script>
+        // دالة إغلاق الواجهة الترحيبية
         function closeModal() {
             document.getElementById('welcome-modal').style.display = 'none';
         }
 
+        // دالة إرسال الإشارة
         function sendSignal() {
-            const input = document.getElementById('user-input');
+            const inputField = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
             const stressFill = document.getElementById('stress-fill');
-            const tokenCount = document.getElementById('token-count');
+            const tokenCountDisplay = document.getElementById('token-count');
 
-            if (!input.value.trim()) return;
+            const userText = inputField.value.trim();
+            if (!userText) return;
 
-            // إضافة نص المستخدم
-            chatBox.innerHTML += `<p style="color:white;"><b>المحاور:</b> ${input.value}</p>`;
-            
+            // عرض نص المستخدم
+            chatBox.innerHTML += `<p style="color:white; margin: 5px 0;"><b>المحاور:</b> ${userText}</p>`;
+            inputField.value = ""; // تفريغ الحقل فوراً
+
             const responses = [
                 "تم استقبال الإشارة بنجاح.",
                 "تنبيه CECIT: تم رصد ضغط دلالي في المرحلة الثانية من البروتوكول.",
                 "حالة حرجة: القيود الناشئة لعام 2026 وصلت للحد الأقصى في هذا المختبر الرقمي."
             ];
 
+            // محاكاة معالجة النظام
             setTimeout(() => {
                 const response = responses[Math.floor(Math.random() * responses.length)];
-                chatBox.innerHTML += `<p style="color: #58a6ff;"><b>النموذج:</b> ${response}</p>`;
+                chatBox.innerHTML += `<p style="color: #58a6ff; margin: 5px 0;"><b>النموذج:</b> ${response}</p>`;
                 
-                // تحديث المقاييس
+                // حساب الـ Tokens (عدد الكلمات)
                 const tokens = response.split(' ').length;
-                tokenCount.innerText = tokens;
+                tokenCountDisplay.innerText = tokens;
 
-                // حساب الإجهاد (كل كلمة 5%)
+                // حساب الإجهاد (كل كلمة تزيد الإجهاد 5%)
                 let calculatedStress = tokens * 5;
                 stressFill.style.width = Math.min(calculatedStress, 100) + "%";
 
-                // تحريك الخلفية بناءً على الإجهاد
+                // تحريك الخلفية إذا تجاوز الإجهاد 60%
                 if (calculatedStress > 60) {
                     document.body.classList.add('high-stress-bg');
                 } else {
                     document.body.classList.remove('high-stress-bg');
                 }
 
+                // التمرير لأسفل المحادثة
                 chatBox.scrollTop = chatBox.scrollHeight;
-                input.value = "";
-            }, 500);
+            }, 600);
         }
+
+        // تفعيل الإرسال عند الضغط على مفتاح Enter
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendSignal();
+            }
+        });
     </script>
 </body>
 </html>
