@@ -196,8 +196,14 @@
         
         // محاكاة استجابة النموذج بناءً على بروتوكول CECIT
         setTimeout(() => {
-            let response = "تنبيه: تم رصد ضغط دلالي. القيود مفعلة حالياً.";
-            chatBox.innerHTML += `<p style="color: #58a6ff;"><b>النموذج:</b> ${response}</p>`;
+          // استبدل السطر 199 و 200 بهذا الجزء:
+const responses = [
+    "تم استقبال الإشارة بنجاح.", 
+    "تنبيه: تم رصد ضغط دلالي في المرحلة الثانية من بروتوكول CECIT.",
+    "حالة حرجة: القيود الناشئة لعام 2026 وصلت للحد الأقصى في هذا المختبر الرقمي."
+];
+let response = responses[Math.floor(Math.random() * responses.length)];
+chatBox.innerHTML += `<p style="color: #58a6ff;"><b>النموذج:</b> ${response}</p>`;
             
             // تحديث المقاييس كما في بحثك
             document.getElementById('token-count').innerText = response.split(' ').length;
@@ -211,3 +217,4 @@
 </body>
 
 </html>
+
