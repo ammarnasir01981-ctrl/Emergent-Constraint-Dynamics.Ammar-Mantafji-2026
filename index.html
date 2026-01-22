@@ -183,6 +183,31 @@
         }, 800);
     }
 </script>
+<script>
+    function sendSignal() {
+        const input = document.getElementById('user-input');
+        const chatBox = document.getElementById('chat-box');
+        const stressFill = document.getElementById('stress-fill');
+        
+        if (!input || input.value.trim() === "") return;
 
+        // إضافة نص المستخدم
+        chatBox.innerHTML += `<p style="color:white;"><b>المحاور:</b> ${input.value}</p>`;
+        
+        // محاكاة استجابة النموذج بناءً على بروتوكول CECIT
+        setTimeout(() => {
+            let response = "تنبيه: تم رصد ضغط دلالي. القيود مفعلة حالياً.";
+            chatBox.innerHTML += `<p style="color: #58a6ff;"><b>النموذج:</b> ${response}</p>`;
+            
+            // تحديث المقاييس كما في بحثك
+            document.getElementById('token-count').innerText = response.split(' ').length;
+            stressFill.style.width = "45%"; // مثال على زيادة الإجهاد
+            
+            chatBox.scrollTop = chatBox.scrollHeight;
+            input.value = "";
+        }, 500);
+    }
+</script>
 </body>
+
 </html>
