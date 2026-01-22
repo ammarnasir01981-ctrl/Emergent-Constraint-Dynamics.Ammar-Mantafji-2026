@@ -108,7 +108,15 @@
             font-weight: bold;
             display: none;
         }
-    </style>
+   /* تأثير النبض للخلفية عند الإجهاد العالي */
+@keyframes stress-pulse {
+    0% { background: radial-gradient(circle, #0d1117 0%, #000000 100%); }
+    100% { background: radial-gradient(circle, #3d0000 0%, #000000 100%); }
+}
+
+.high-stress-bg {
+    animation: stress-pulse 1.5s infinite alternate;
+}</style>
 </head>
 <body>
 
@@ -207,9 +215,15 @@ chatBox.innerHTML += `<p style="color: #58a6ff;"><b>النموذج:</b> ${respon
             
             // تحديث المقاييس كما في بحثك
             document.getElementById('token-count').innerText = response.split(' ').length;
-            stressFill.style.width = "45%"; // مثال على زيادة الإجهاد
-            
-            chatBox.scrollTop = chatBox.scrollHeight;
+// حساب الإجهاد بناءً على طول الرد (كل كلمة تزيد 5%)
+            let calculatedStress = response.split(' ').length * 5; 
+            stressFill.style.width = Math.min(calculatedStress, 100) + "%";            
+            // تفعيل نبض الخلفية إذا تجاوز الإجهاد 60%
+            if (calculatedStress > 60) {
+                document.body.classList.add('high-stress-bg');
+            } else {
+                document.body.classList.remove('high-stress-bg');
+            }chatBox.scrollTop = chatBox.scrollHeight;
             input.value = "";
         }, 500);
     }
@@ -217,4 +231,5 @@ chatBox.innerHTML += `<p style="color: #58a6ff;"><b>النموذج:</b> ${respon
 </body>
 
 </html>
+
 
